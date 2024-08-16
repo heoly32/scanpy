@@ -466,6 +466,8 @@ def read_visium(
             ]
         elif files['tissue_positions_file'].suffix == '.parquet':
             positions = pd.read_parquet(files['tissue_positions_file'])
+            positions = positions.set_index(positions['barcode'])
+            positions = positions.drop(['barcode'], axis=1)
 
         # check if files exists, continue if images are missing
         for f in files.values():
