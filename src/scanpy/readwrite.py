@@ -446,10 +446,9 @@ def read_visium(
             hires_image=path / 'spatial/tissue_hires_image.png',
             lowres_image=path / 'spatial/tissue_lowres_image.png',
         )
-        
         if files['tissue_positions_file'].suffix == '.csv':
             positions = pd.read_csv(files['tissue_positions_file'], header=None)
-		elif files['tissue_positions_file'].suffix == '.parquet':
+        elif files['tissue_positions_file'].suffix == '.parquet':
             positions = pd.read_parquet(files['tissue_positions_file'])
 
         # check if files exists, continue if images are missing
