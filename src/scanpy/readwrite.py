@@ -442,15 +442,15 @@ def read_visium(
         )
         files = dict(
             tissue_positions_file = next((path / f'spatial/tissue_positions_list{suffix}' for suffix in ['.csv', '.parquet'] if (path / f'spatial/tissue_positions_list{suffix}').exists()), None),
-			scalefactors_json_file=path / 'spatial/scalefactors_json.json',
-			hires_image=path / 'spatial/tissue_hires_image.png',
-			lowres_image=path / 'spatial/tissue_lowres_image.png',
+            scalefactors_json_file=path / 'spatial/scalefactors_json.json',
+            hires_image=path / 'spatial/tissue_hires_image.png',
+            lowres_image=path / 'spatial/tissue_lowres_image.png',
         )
-
+        
         if files['tissue_positions_file'].suffix == '.csv':
-			positions = pd.read_csv(files['tissue_positions_file'], header=None)
+            positions = pd.read_csv(files['tissue_positions_file'], header=None)
 		elif files['tissue_positions_file'].suffix == '.parquet':
-			positions = pd.read_parquet(files['tissue_positions_file'])
+            positions = pd.read_parquet(files['tissue_positions_file'])
 
         # check if files exists, continue if images are missing
         for f in files.values():
