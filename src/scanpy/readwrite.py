@@ -441,11 +441,16 @@ def read_visium(
             else path / "spatial/tissue_positions_list.csv"
         )
         files = dict(
-            tissue_positions_file=tissue_positions_file,
-            scalefactors_json_file=path / "spatial/scalefactors_json.json",
-            hires_image=path / "spatial/tissue_hires_image.png",
-            lowres_image=path / "spatial/tissue_lowres_image.png",
+            tissue_positions_file = next((path / f'spatial/tissue_positions_list{suffix}' for suffix in ['.csv', '.parquet'] if (path / f'spatial/tissue_positions_list{suffix}').exists()), None),
+			scalefactors_json_file=path / 'spatial/scalefactors_json.json',
+			hires_image=path / 'spatial/tissue_hires_image.png',
+			lowres_image=path / 'spatial/tissue_lowres_image.png',
         )
+
+        if files['tissue_positions_file'].suffix == '.csv':
+			positions = pd.read_csv(files['tissue_positions_file'], header=None)
+		elif files['tissue_positions_file'].suffix == '.parquet':
+			positions = pd.read_parquet(files['tissue_positions_file'])
 
         # check if files exists, continue if images are missing
         for f in files.values():
@@ -457,7 +462,7 @@ def read_visium(
                     )
                 else:
                     raise OSError(f"Could not find '{f}'")
-
+       
         adata.uns["spatial"][library_id]["images"] = dict()
         for res in ["hires", "lowres"]:
             try:
