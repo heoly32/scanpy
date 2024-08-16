@@ -435,13 +435,18 @@ def read_visium(
     adata.uns["spatial"][library_id] = dict()
 
     if load_images:
-        tissue_positions_file = (
-            path / "spatial/tissue_positions.csv"
-            if (path / "spatial/tissue_positions.csv").exists()
-            else path / "spatial/tissue_positions_list.csv"
-        )
+        tissue_positions_file = None
+        if (path/ "spatial/tissue_positions.csv").exists():
+            tissue_positions_file = path/ "spatial/tissue_positions.csv"
+        elif (path/ "spatial/tissue_positions_list.csv").exists():
+            tissue_positions_file = path/ "spatial/tissue_positions_list.csv"
+        elif (path/ "spatial/tissue_positions.parquet").exists():
+            tissue_positions_file = path/ "spatial/tissue_positions.parquet"
+        elif (path/ "spatial/tissue_positions_list.parquet").exists():
+            tissue_positions_file = path/ "spatial/tissue_positions_list.parquet"
+
         files = dict(
-            tissue_positions_file = next((path / f'spatial/tissue_positions_list{suffix}' for suffix in ['.csv', '.parquet'] if (path / f'spatial/tissue_positions_list{suffix}').exists()), None),
+            tissue_positions_file = tissue_positions_file,
             scalefactors_json_file=path / 'spatial/scalefactors_json.json',
             hires_image=path / 'spatial/tissue_hires_image.png',
             lowres_image=path / 'spatial/tissue_lowres_image.png',
