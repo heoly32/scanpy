@@ -454,7 +454,9 @@ def read_visium(
 
         # read coordinates
         if files['tissue_positions_file'].suffix == '.csv':
-            positions = pd.read_csv(files['tissue_positions_file'], header=0 if tissue_positions_file.name == "tissue_positions.csv" else None, index_col=0)
+            positions = pd.read_csv(files['tissue_positions_file'], 
+                                    header=0 if tissue_positions_file.name == "tissue_positions.csv" else None, 
+                                    index_col=0)
         elif files['tissue_positions_file'].suffix == '.parquet':
             positions = pd.read_parquet(files['tissue_positions_file'])
         
@@ -465,6 +467,7 @@ def read_visium(
             "pxl_col_in_fullres",
             "pxl_row_in_fullres",
         ]
+
         # check if files exists, continue if images are missing
         for f in files.values():
             if not f.exists():
